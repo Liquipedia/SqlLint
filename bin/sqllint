@@ -3,8 +3,8 @@
 $autoloadFile = "vendor/autoload.php";
 
 $found = false;
-if ( file_exists( autoloadFile ) ) {
-	require_once autoloadFile;
+if ( file_exists( $autoloadFile ) ) {
+	require_once $autoloadFile;
 	$found = true;
 }
 

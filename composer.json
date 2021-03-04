@@ -1,6 +1,7 @@
 {
 	"name": "liquipedia/sqllint",
-	"type": "project",
+	"version": "1.0.0",
+	"type": "library",
 	"license": "GPL-2.0-or-later",
 	"keywords": [ "sql", "lint" ],
 	"authors": [

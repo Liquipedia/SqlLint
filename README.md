@@ -22,7 +22,8 @@ composer require liquipedia/sqllint
 ### Via composer script
 
 Add this to your composer.json
-```
+
+```json
 {
 	"require-dev": {
 		"liquipedia/sqllint": "*"

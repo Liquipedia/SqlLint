@@ -1,0 +1,42 @@
+{
+	"name": "liquipedia/sqllint",
+	"type": "project",
+	"license": "GPL-2.0-or-later",
+	"keywords": [ "sql", "lint" ],
+	"authors": [
+		{
+			"name": "Alex Winkler",
+			"email": "contact@liquipedia.net",
+			"homepage": "https://liquipedia.net"
+		}
+	],
+	"require": {
+		"phpmyadmin/sql-parser": "*"
+	},
+	"require-dev": {
+		"mediawiki/mediawiki-codesniffer": "*",
+		"php-parallel-lint/php-parallel-lint": "*",
+		"php-parallel-lint/php-console-highlighter": "*"
+	},
+	"bin": [
+		"bin/sqllint"
+	],
+	"autoload": {
+		"psr-4": {
+			"Liquipedia\\SqlLint\\": "src"
+		}
+	},
+	"scripts": {
+		"lint": [
+			"parallel-lint --colors --exclude vendor ."
+		],
+		"phpcs": [
+			"phpcs -p -s"
+		],
+		"test": [
+			"composer lint",
+			"composer phpcs"
+		],
+		"fix": "phpcbf"
+	}
+}

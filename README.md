@@ -1,5 +1,8 @@
 # SqlLint
 ![Code Style](https://github.com/Liquipedia/SqlLint/workflows/Code%20Style/badge.svg)
+<a href="https://packagist.org/packages/liquipedia/sqllint"><img src="https://img.shields.io/packagist/dt/liquipedia/sqllint" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/liquipedia/sqllint"><img src="https://img.shields.io/packagist/v/liquipedia/sqllint" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/liquipedia/sqllint"><img src="https://img.shields.io/packagist/l/liquipedia/sqllint" alt="License"></a>
 
 This is a thin wrapper around the SqlParser from the [phpMyAdmin project][1] which can be used to lint any amount of sql files from the command line.
 

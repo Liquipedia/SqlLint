@@ -41,7 +41,11 @@ class SqlLint {
 				echo '.';
 			}
 		}
-		echo $output;
+		if ( $return === 0 ) {
+			echo PHP_EOL . 'No linting errors found' . PHP_EOL . PHP_EOL;
+		} else {
+			echo $output;
+		}
 
 		return $return;
 	}

@@ -16,6 +16,7 @@
 	},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "*",
+		"mediawiki/minus-x": "*",
 		"php-parallel-lint/php-parallel-lint": "*",
 		"php-parallel-lint/php-console-highlighter": "*"
 	},
@@ -34,10 +35,17 @@
 		"phpcs": [
 			"phpcs -p -s"
 		],
+		"minus-x": [
+			"minus-x check ."
+		],
 		"test": [
+			"composer minus-x",
 			"composer lint",
 			"composer phpcs"
 		],
-		"fix": "phpcbf"
+		"fix": [
+			"minus-x fix .",
+			"phpcbf"
+		]
 	}
 }

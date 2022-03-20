@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types=1 );
+
 namespace Liquipedia\SqlLint\Report;
 
 abstract class Report implements IReport {

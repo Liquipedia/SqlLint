@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types=1 );
+
 namespace Liquipedia\SqlLint;
 
 use Liquipedia\SqlLint\Report\IReport;
@@ -34,11 +36,17 @@ class Runner {
 		$regex = new RegexIterator( $iterator, '/^.+\.sql$/i', RecursiveRegexIterator::GET_MATCH );
 		$items = [];
 		foreach ( $regex as $item ) {
-			$items[] = $item[ 0 ];
+			if ( is_array( $item ) && array_key_exists( 0, $item ) ) {
+				$items[] = $item[ 0 ];
+			}
 		}
 		$this->report->setAmountFiles( count( $items ) );
 		foreach ( $items as $fileName ) {
 			$fileContent = file_get_contents( $fileName );
+			if ( $fileContent === false ) {
+				// File could not be read
+				continue;
+			}
 			$lexer = new Lexer( $fileContent );
 			$parser = new Parser( $lexer->list );
 			$errors = ParserError::get( [ $lexer, $parser ] );

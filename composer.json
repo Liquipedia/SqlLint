@@ -38,7 +38,7 @@
 			"phpcs -p -s"
 		],
 		"phpstan": [
-			"phpstan analyse -l 6 src bin"
+			"phpstan analyse -l 9 src bin"
 		],
 		"minus-x": [
 			"minus-x check ."

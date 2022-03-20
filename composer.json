@@ -19,7 +19,8 @@
 		"mediawiki/mediawiki-codesniffer": "*",
 		"mediawiki/minus-x": "*",
 		"php-parallel-lint/php-parallel-lint": "*",
-		"php-parallel-lint/php-console-highlighter": "*"
+		"php-parallel-lint/php-console-highlighter": "*",
+		"phpstan/phpstan": "*"
 	},
 	"bin": [
 		"bin/sqllint"
@@ -36,13 +37,17 @@
 		"phpcs": [
 			"phpcs -p -s"
 		],
+		"phpstan": [
+			"phpstan analyse -l 6 src bin"
+		],
 		"minus-x": [
 			"minus-x check ."
 		],
 		"test": [
 			"composer minus-x",
 			"composer lint",
-			"composer phpcs"
+			"composer phpcs",
+			"composer phpstan"
 		],
 		"fix": [
 			"minus-x fix .",

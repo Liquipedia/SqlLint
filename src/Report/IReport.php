@@ -6,6 +6,11 @@ namespace Liquipedia\SqlLint\Report;
 
 interface IReport {
 
+	public const REPORT_TYPES = [
+		'cli' => CLI::class,
+		'junit' => JUnit::class,
+	];
+
 	/**
 	 * Set total amount of files to be linted so we can show a progress bar
 	 * @param int $amount

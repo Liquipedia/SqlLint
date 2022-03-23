@@ -22,6 +22,10 @@ composer require liquipedia/sqllint
 ./vendor/bin/sqllint
 ```
 
+```sh
+./vendor/bin/sqllint --report=junit > report-junit.xml
+```
+
 ### Via composer script
 
 Add this to your composer.json
@@ -34,6 +38,9 @@ Add this to your composer.json
 	"scripts": {
 		"sqllint": [
 			"sqllint"
+		],
+		"sqllint-junit": [
+			"sqllint --report=junit > report-junit.xml"
 		]
 	}
 }
@@ -44,5 +51,11 @@ and run
 ```sh
 composer sqllint
 ```
+
+### Parameter
+| Name     | Values                   |
+|----------|--------------------------|
+| --report | "cli" (default), "junit" |
+
 [1]:https://github.com/phpmyadmin/sql-parser
 [2]:https://getcomposer.org/

@@ -99,8 +99,15 @@ class CLI extends Report {
 	 * Update counters so we can show a nice progress bar
 	 */
 	private function addNonTtyCounterMaybe(): void {
+		$this->lineCounter++;
+		$this->totalCounter++;
 		if ( $this->lineCounter >= 60 ) {
 			echo ' ';
+			echo $this->makeCounterText();
+			echo PHP_EOL;
+			$this->lineCounter = 0;
+		} elseif ( $this->totalCounter === $this->amount ) {
+			echo str_repeat( ' ', 60 - $this->lineCounter + 1 );
 			echo $this->makeCounterText();
 			echo PHP_EOL;
 			$this->lineCounter = 0;

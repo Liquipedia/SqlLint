@@ -25,17 +25,24 @@ class CLI extends Report {
 	 */
 	private $totalCounter = 0;
 
+	/**
+	 * Mark if this is a tty which supports control codes
+	 * @var bool
+	 */
+	private $isTty = false;
+
 	public function __construct() {
 		$this->output = PHP_EOL . PHP_EOL;
+		if ( defined( 'STDOUT' ) ) {
+			$this->isTty = stream_isatty( STDOUT );
+		}
 	}
 
 	/**
 	 * @param string $fileName
 	 */
 	public function addSuccess( string $fileName ): void {
-		echo '.';
-		$this->updateCounter();
-		$this->addNewLineMaybe();
+		$this->markProgress( '.' );
 	}
 
 	/**
@@ -43,9 +50,7 @@ class CLI extends Report {
 	 * @param array<int, array<int, mixed>> $errors
 	 */
 	public function addError( string $fileName, array $errors ): void {
-		echo 'E';
-		$this->updateCounter();
-		$this->addNewLineMaybe();
+		$this->markProgress( 'E' );
 		$this->exitCode = 1;
 		$countErrors = count( $errors );
 		$this->output .= 'FILE: ' . realpath( $fileName ) . PHP_EOL;
@@ -65,6 +70,19 @@ class CLI extends Report {
 	}
 
 	/**
+	 * @param string $letter
+	 */
+	private function markProgress( string $letter ): void {
+		echo $letter;
+		if ( $this->isTty ) {
+			$this->updateCounter();
+			$this->addNewLineMaybe();
+		} else {
+			$this->addNonTtyCounterMaybe();
+		}
+	}
+
+	/**
 	 * Update counters so we can show a nice progress bar
 	 */
 	private function updateCounter(): void {
@@ -73,9 +91,29 @@ class CLI extends Report {
 		echo self::SAVE_CURSOR_POSITION;
 		echo self::GOTO_COLUMN_62;
 		echo self::CLEAR_LINE_AFTER_CURRENT_POSITION;
-		echo $this->totalCounter . '/' . $this->amount
-			. ' (' . round( ( $this->totalCounter / $this->amount ) * 100, 1 ) . '%)';
+		echo $this->makeCounterText();
 		echo self::RESTORE_CURSOR_POSITION;
+	}
+
+	/**
+	 * Update counters so we can show a nice progress bar
+	 */
+	private function addNonTtyCounterMaybe(): void {
+		if ( $this->lineCounter >= 60 ) {
+			echo ' ';
+			echo $this->makeCounterText();
+			echo PHP_EOL;
+			$this->lineCounter = 0;
+		}
+	}
+
+	/**
+	 * Make text for percentage
+	 * @return string
+	 */
+	private function makeCounterText(): string {
+		return $this->totalCounter . '/' . $this->amount
+			. ' (' . round( ( $this->totalCounter / $this->amount ) * 100, 1 ) . '%)';
 	}
 
 	/**

@@ -1,7 +1,7 @@
 {
 	"name": "liquipedia/sqllint",
 	"description": "A thin wrapper around the SqlParser from the phpMyAdmin project which can be used to lint any amount of sql files from the command line.",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"type": "library",
 	"license": "GPL-2.0-or-later",
 	"keywords": [ "sql", "lint", "junit" ],

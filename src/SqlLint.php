@@ -12,24 +12,16 @@ class SqlLint {
 	 * @return int
 	 */
 	public static function lint(): int {
-		$args = getopt( '', [ 'report::' ] );
-		$reportType = 'cli';
-		if ( array_key_exists( 'report', $args ) ) {
-			if ( array_key_exists( strval( $args[ 'report' ] ), IReport::REPORT_TYPES ) ) {
-				$reportType = strval( $args[ 'report' ] );
-			} else {
-				die(
-					PHP_EOL . 'ERROR: Unknown report type "' . strval( $args[ 'report' ] ) . '",'
-					. ' should be one of "' . implode( '", "', array_keys( IReport::REPORT_TYPES ) ) . '"'
-					. PHP_EOL . PHP_EOL
-				 );
-			}
-		}
-		$reportClass = IReport::REPORT_TYPES[ $reportType ];
+		if ( Parameters::getBool( 'help', false ) ) {
+			Parameters::displayHelp();
+			return 0;
+		} else {
+			$reportClass = IReport::REPORT_TYPES[ Parameters::get( 'report', 'cli' ) ];
 
-		$report = new $reportClass;
-		$runner = new Runner( $report );
-		return $runner->run();
+			$report = new $reportClass;
+			$runner = new Runner( $report );
+			return $runner->run();
+		}
 	}
 
 }

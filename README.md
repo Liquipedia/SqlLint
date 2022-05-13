@@ -55,6 +55,7 @@ composer sqllint
 ### Parameter
 | Name     | Values                   |
 |----------|--------------------------|
+| --help   |                          |
 | --report | "cli" (default), "junit" |
 
 [1]:https://github.com/phpmyadmin/sql-parser

@@ -9,12 +9,14 @@ class Parameters {
 	private const PARAMETERS = [
 		'help' => [
 			'description' => 'Displays this help command',
+			'default' => false,
 		],
 		'report' => [
 			'values' => [
 				'cli',
 				'junit',
 			],
+			'default' => 'cli',
 			'description' => 'Defines the output formatter',
 		],
 	];
@@ -31,10 +33,9 @@ class Parameters {
 
 	/**
 	 * @param string $parameter
-	 * @param string $default
 	 * @return string
 	 */
-	public static function get( string $parameter, string $default ): string {
+	public static function get( string $parameter ): string {
 		self::initialiseCliParamsMaybe();
 
 		if ( self::$stringParameters !== null && array_key_exists( $parameter, self::$stringParameters ) ) {
@@ -54,7 +55,7 @@ class Parameters {
 				die( $message );
 			}
 		} elseif ( array_key_exists( $parameter, self::PARAMETERS ) ) {
-			return $default;
+			return strval( self::PARAMETERS[ $parameter ][ 'default' ] );
 		} else {
 			die(
 				PHP_EOL . 'ERROR: Unknown parameter "' . $parameter . '"' . PHP_EOL . PHP_EOL
@@ -64,16 +65,15 @@ class Parameters {
 
 	/**
 	 * @param string $parameter
-	 * @param bool $default
 	 * @return bool
 	 */
-	public static function getBool( string $parameter, bool $default ): bool {
+	public static function getBool( string $parameter ): bool {
 		self::initialiseCliParamsMaybe();
 
 		if ( self::$boolParameters !== null && array_key_exists( $parameter, self::$boolParameters ) ) {
 			return true;
 		} elseif ( array_key_exists( $parameter, self::PARAMETERS ) ) {
-			return $default;
+			return boolval( self::PARAMETERS[ $parameter ][ 'default' ] );
 		} else {
 			return false;
 		}
@@ -91,7 +91,7 @@ class Parameters {
 				$help .= str_repeat( ' ', $parameterSpacer )
 					. 'Values: One of "' . implode( '", "', $value[ 'values' ] ) . '"' . PHP_EOL
 					. str_repeat( ' ', $parameterSpacer )
-					. 'Default: "' . $value[ 'values' ][ 0 ] . '"' . PHP_EOL;
+					. 'Default: "' . $value[ 'default' ] . '"' . PHP_EOL;
 			}
 		}
 		echo $help;

@@ -19,7 +19,7 @@ class JUnit extends Report {
 			. ' name="sqllint"'
 			. ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
 			. ' xsi:noNamespaceSchemaLocation="'
-			. 'https://raw.githubusercontent.com/junit-team/junit5/r5.5.1'
+			. 'https://raw.githubusercontent.com/junit-team/junit5/r5.8.2'
 			. '/platform-tests/src/test/resources/jenkins-junit.xsd"'
 			. ' />'
 		);

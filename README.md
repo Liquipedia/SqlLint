@@ -53,10 +53,10 @@ composer sqllint
 ```
 
 ### Parameter
-| Name     | Values                   |
-|----------|--------------------------|
-| --help   |                          |
-| --report | "cli" (default), "junit" |
+To check out parameters, please refer to the `src/Parameters.php` file or use the `--help` parameter.
+
+### `.sqllint.json`
+Parameters for SqlLint can optionally also be provided via a `.sqllint.json` file in the project root. Parameters passed via command line always have precedence over the parameters set in `.sqllint.json`.
 
 [1]:https://github.com/phpmyadmin/sql-parser
 [2]:https://getcomposer.org/

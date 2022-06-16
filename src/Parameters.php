@@ -12,6 +12,11 @@ class Parameters {
 			'default' => false,
 			'description' => 'Displays this help command',
 		],
+		'path' => [
+			'type' => self::PARAM_TYPE_STRING,
+			'default' => './',
+			'description' => 'Defines the path where the SQL files can be found',
+		],
 		'report' => [
 			'type' => self::PARAM_TYPE_STRING,
 			'values' => [
@@ -43,22 +48,7 @@ class Parameters {
 		self::initialiseParamsMaybe();
 
 		if ( self::$stringParameters !== null && array_key_exists( $parameter, self::$stringParameters ) ) {
-			if (
-				self::PARAMETERS[ $parameter ][ 'type' ] === self::PARAM_TYPE_STRING
-				&& array_key_exists( 'values', self::PARAMETERS[ $parameter ] )
-				&& in_array( self::$stringParameters[ $parameter ], self::PARAMETERS[ $parameter ][ 'values' ] )
-			) {
-				return self::$stringParameters[ $parameter ];
-			} else {
-				$message =
-					PHP_EOL . 'ERROR: Unknown value for parameter "' . $parameter . '"';
-				if ( array_key_exists( 'values', self::PARAMETERS[ $parameter ] ) ) {
-					$message .= ', should be one of'
-						. ' "' . implode( '", "', self::PARAMETERS[ $parameter ][ 'values' ] ) . '"';
-				}
-				$message .= PHP_EOL . PHP_EOL;
-				die( $message );
-			}
+			return self::$stringParameters[ $parameter ];
 		} elseif ( array_key_exists( $parameter, self::PARAMETERS ) ) {
 			return strval( self::PARAMETERS[ $parameter ][ 'default' ] );
 		} else {
@@ -89,8 +79,8 @@ class Parameters {
 		$parameterSpacer = $parameterMaxLength + 6;
 		$help = 'Available parameters:' . PHP_EOL . PHP_EOL;
 
-		foreach ( self::PARAMETERS as $key => $value ) {
-			$help .= ' --' . $key . str_repeat( ' ', $parameterMaxLength - strlen( $key ) + 3 )
+		foreach ( self::PARAMETERS as $parameter => $value ) {
+			$help .= ' --' . $parameter . str_repeat( ' ', $parameterMaxLength - strlen( $parameter ) + 3 )
 				. $value[ 'description' ] . PHP_EOL;
 			$help .= str_repeat( ' ', $parameterSpacer )
 				. 'Type: ' . $value[ 'type' ] . PHP_EOL;
@@ -126,9 +116,9 @@ class Parameters {
 			$jsonArray = json_decode( $json, true );
 			$opts = [];
 			if ( is_array( $jsonArray ) ) {
-				foreach ( $jsonArray as $key => $value ) {
-					if ( is_string( $key ) && ( is_string( $value ) || is_bool( $value ) ) ) {
-						$opts[$key] = $value;
+				foreach ( $jsonArray as $parameter => $value ) {
+					if ( is_string( $parameter ) && ( is_string( $value ) || is_bool( $value ) ) ) {
+						$opts[ $parameter ] = $value;
 					}
 				}
 			}
@@ -138,8 +128,8 @@ class Parameters {
 
 	private static function initialiseCLIParams(): void {
 		$params = [];
-		foreach ( self::PARAMETERS as $key => $value ) {
-			$paramType = $key;
+		foreach ( self::PARAMETERS as $parameter => $value ) {
+			$paramType = $parameter;
 			if ( $value[ 'type' ] === self::PARAM_TYPE_STRING ) {
 				$paramType .= '::';
 			}
@@ -153,25 +143,39 @@ class Parameters {
 	 * @param array<string, string|bool|array<int, mixed>> $opts
 	 */
 	private static function setParameterValues( array $opts ): void {
-		foreach ( self::PARAMETERS as $key => $value ) {
-			if ( array_key_exists( $key, $opts ) ) {
-				if ( is_array( $opts[ $key ] ) ) {
-					die( PHP_EOL . 'ERROR: More than one value for "' . $key . '"' . PHP_EOL . PHP_EOL );
+		foreach ( self::PARAMETERS as $parameter => $value ) {
+			if ( array_key_exists( $parameter, $opts ) ) {
+				if ( is_array( $opts[ $parameter ] ) ) {
+					die( PHP_EOL . 'ERROR: More than one value for "' . $parameter . '"' . PHP_EOL . PHP_EOL );
 				} elseif ( $value[ 'type' ] === self::PARAM_TYPE_STRING ) {
-					if ( is_string( $opts[ $key ] ) ) {
-						self::$stringParameters[ $key ] = $opts[ $key ];
+					if ( is_string( $opts[ $parameter ] ) ) {
+						if (
+							array_key_exists( 'values', self::PARAMETERS[ $parameter ] )
+							&& !in_array( $opts[ $parameter ], self::PARAMETERS[ $parameter ][ 'values' ] )
+						) {
+							$message =
+								PHP_EOL . 'ERROR: Unknown value for parameter "' . $parameter . '"';
+							if ( array_key_exists( 'values', self::PARAMETERS[ $parameter ] ) ) {
+								$message .= ', should be one of'
+									. ' "' . implode( '", "', self::PARAMETERS[ $parameter ][ 'values' ] ) . '"';
+							}
+							$message .= PHP_EOL . PHP_EOL;
+							die( $message );
+						} else {
+							self::$stringParameters[ $parameter ] = $opts[ $parameter ];
+						}
 					} else {
 						die(
-							PHP_EOL . 'ERROR: Parameter "' . $key . '" should be of type "'
+							PHP_EOL . 'ERROR: Parameter "' . $parameter . '" should be of type "'
 								. self::PARAM_TYPE_STRING . '"' . PHP_EOL . PHP_EOL
 						);
 					}
 				} elseif ( $value[ 'type' ] === self::PARAM_TYPE_BOOL ) {
-					if ( is_bool( $opts[ $key ] ) ) {
-						self::$boolParameters[ $key ] = true;
+					if ( is_bool( $opts[ $parameter ] ) ) {
+						self::$boolParameters[ $parameter ] = true;
 					} else {
 						die(
-							PHP_EOL . 'ERROR: Parameter "' . $key . '" should be of type "'
+							PHP_EOL . 'ERROR: Parameter "' . $parameter . '" should be of type "'
 								. self::PARAM_TYPE_BOOL . '"' . PHP_EOL . PHP_EOL
 						);
 					}

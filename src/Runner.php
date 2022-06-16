@@ -31,7 +31,13 @@ class Runner {
 	 * @return int
 	 */
 	public function run(): int {
-		$directory = new RecursiveDirectoryIterator( './' );
+		$folder = Parameters::get( 'path' );
+		$folderWithPath = realpath( $folder );
+		if ( !$folderWithPath ) {
+			die( PHP_EOL . 'ERROR: Path "' . $folder . '" does not exist.' . PHP_EOL . PHP_EOL );
+		}
+
+		$directory = new RecursiveDirectoryIterator( $folderWithPath );
 		$iterator = new RecursiveIteratorIterator( $directory );
 		$regex = new RegexIterator( $iterator, '/^.+\.sql$/i', RecursiveRegexIterator::GET_MATCH );
 		$items = [];

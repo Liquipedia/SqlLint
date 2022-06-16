@@ -86,8 +86,10 @@ class Parameters {
 				. 'Type: ' . $value[ 'type' ] . PHP_EOL;
 			if ( array_key_exists( 'values', $value ) ) {
 				$help .= str_repeat( ' ', $parameterSpacer )
-					. 'Values: One of "' . implode( '", "', $value[ 'values' ] ) . '"' . PHP_EOL
-					. str_repeat( ' ', $parameterSpacer )
+					. 'Values: One of "' . implode( '", "', $value[ 'values' ] ) . '"' . PHP_EOL;
+			}
+			if ( array_key_exists( 'default', $value ) ) {
+				$help .= str_repeat( ' ', $parameterSpacer )
 					. 'Default: "' . $value[ 'default' ] . '"' . PHP_EOL;
 			}
 		}

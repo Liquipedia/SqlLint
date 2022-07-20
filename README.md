@@ -11,7 +11,7 @@ This is a thin wrapper around the SqlParser from the [phpMyAdmin project][1] whi
 Please use [Composer][2] to install:
 
 ```sh
-composer require liquipedia/sqllint
+composer require liquipedia/sqllint --dev
 ```
 
 ## Usage
